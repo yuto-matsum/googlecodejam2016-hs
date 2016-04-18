@@ -1,6 +1,7 @@
 flags: {}
 extra-package-dbs: []
 packages:
-- '.'
-extra-deps: []
+  - '.'
+extra-deps:
+  - stack-hpc-coveralls-0.0.3.0
 resolver: lts-5.1
