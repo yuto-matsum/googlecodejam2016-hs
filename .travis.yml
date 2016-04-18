@@ -10,9 +10,7 @@ cache:
 before_install:
   - mkdir -p $HOME/.local/bin
   - export PATH=$HOME/.local/bin:$PATH
-  - export STACK_VERSION=1.0.0.0
-  - export STACK_FULLVERSION=stack-$STACK_VERSION-linux-x86_64
-  - travis_retry curl -L https://github.com/commercialhaskell/stack/releases/download/v$STACK_VERSION/$STACK_FULLVERSION.tar.gz | tar xz --strip-components 1 -C ~/.local/bin $STACK_FULLVERSION/stack;
+  - travis_retry curl -L https://github.com/commercialhaskell/stack/releases/download/v1.0.4.3/stack-1.0.4.3-linux-x86_64.tar.gz | tar xz --strip-components 1 -C ~/.local/bin stack-1.0.4.3-linux-x86_64/stack;
   - chmod a+x $HOME/.local/bin/stack
   - stack --version
 
@@ -23,5 +21,5 @@ script:
   - stack test --no-terminal --coverage
 
 after_script:
-  - travis_retry curl -L https://github.com/rubik/stack-hpc-coveralls/releases/download/v0.0.3.0/shc-linux-x64-$GHCVER.tar.bz2 | tar -xj
+  - travis_retry curl -L https://github.com/rubik/stack-hpc-coveralls/releases/download/v0.0.3.0/shc-linux-x64-${GHCVER}.tar.bz2 | tar -xj
   - ./shc googlecodejam2016-hs tests
