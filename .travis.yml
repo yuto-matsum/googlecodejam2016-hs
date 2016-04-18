@@ -1,11 +1,27 @@
 language: haskell
 
-ghc: 7.8
-# ghc : 7.10
+env:
+  - GHCVER=7.10.2 STACK_YAML=stack.yaml
+
+cache:
+  directories:
+    - $HOME/.stack/
+
+before_install:
+  - mkdir -p $HOME/.local/bin
+  - export PATH=$HOME/.local/bin:$PATH
+  - export STACK_VERSION=1.0.0.0
+  - export STACK_FULLVERSION=stack-$STACK_VERSION-linux-x86_64
+  - travis_retry curl -L https://github.com/commercialhaskell/stack/releases/download/v$STACK_VERSION/$STACK_FULLVERSION.tar.gz | tar xz --strip-components 1 -C ~/.local/bin $STACK_FULLVERSION/stack;
+  - chmod a+x $HOME/.local/bin/stack
+  - stack --version
+
+install:
+  - stack setup --no-terminal
 
 script:
-  - cabal configure --enable-tests --enable-library-coverage && cabal build && cabal test
+  - stack test --no-terminal --coverage
 
 after_script:
-  - cabal install hpc-coveralls
-  - hpc-coveralls googlecodejam2016-hs
+  - travis_retry curl -L https://github.com/rubik/stack-hpc-coveralls/releases/download/v0.0.3.0/shc-linux-x64-$GHCVER.tar.bz2 | tar -xj
+  - ./shc googlecodejam2016-hs tests
