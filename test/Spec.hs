@@ -1,7 +1,8 @@
+import           System.Directory
 import           Test.DocTest
 
 main :: IO ()
 main = do
-  doctest ["q1a/A.hs"]
-  doctest ["q1a/B.hs"]
-  doctest ["q1a/C.hs"]
+  ps <- getDirectoryContents "./q1a"
+  print ps
+  -- doctest ps

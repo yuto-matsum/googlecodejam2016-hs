@@ -56,13 +56,13 @@ type Circle = [Int]
 type Path = [Int]
 
 {-|
->>>circle [1,2,3] [1,2]
+>>> circle [1,2,3] [1,2]
 [1,2,3]
->>>circle [1,2] [1,2,3]
+>>> circle [1,2] [1,2,3]
 [1,2,3]
->>>circle [1,2,3,10,11] [6,5,4,3]
+>>> circle [1,2,3,10,11] [6,5,4,3]
 [1,2,3,4,5,6]
->>>circle [1,2,3,10,11] [4,3]
+>>> circle [1,2,3,10,11] [4,3]
 [1,2,3,4]
 -}
 circle :: Path -> Path -> Circle
@@ -79,6 +79,8 @@ True
 False
 >>> [1,2,3] `isSubpathOf` [1,2,3,4,5]
 True
+>>> [1,2,3] `isSubpathOf` [1,2,3]
+True
 -}
 isSubpathOf :: Path -> Path -> Bool
 isSubpathOf [] _  = True
@@ -88,9 +90,9 @@ isSubpathOf p q
   | otherwise        = p `isSubpathOf` tail q
 
 {-|
->>>connectPath [1,2,3,10,11] [3,4,5,6]
+>>> connectPath [1,2,3,10,11] [3,4,5,6]
 [1,2,3,4,5,6]
->>>connectPath [1,2,3,10,11] [3,4]
+>>> connectPath [1,2,3,10,11] [3,4]
 [1,2,3,4]
 -}
 connectPath :: Path -> Path -> Circle
@@ -124,27 +126,80 @@ orderByLength p q | lp >  lq = GT
 [[1,7,9,3,10],[2,8,6],[4,10],[5,9]]
 -}
 pathsOf :: Problem -> [Path]
-pathsOf p = (trim . walkEachProblems) [1..length p] where
-  walkEachProblems = map (walk p)
-  trim xs = filter (\x -> rotate x `notElem` xs) xs
-
-rotate :: [a] -> [a]
-rotate xs = tail xs ++ [head xs]
+pathsOf = trimSubpath . trimSamePath . reverse . walkFromAllPoints
 
 {-|
->>> isCube [[1]]
+>>> walkFromAllPoints [2,3,4,1]
+[[1,2,3,4],[2,3,4,1],[3,4,1,2],[4,1,2,3]]
+-}
+walkFromAllPoints :: Problem -> [Path]
+walkFromAllPoints p = map (walk p) [1..length p]
+
+{-|
+>>> trimSamePath [[4,1,2,3],[3,4,1,2],[2,3,4,1],[1,2,3,4]]
+[1,2,3,4]
+
+-- FIXME: trimSamePath [[4,3],[3,4],[2,3,4],[1,3,4]] does not return, loop
+-}
+trimSamePath :: [Path] -> [Path]
+trimSamePath [] = []
+trimSamePath (x:xs) | any (isRotation x) [notx | notx<-xs, notx/=x] = next
+                    | otherwise             = x : next where
+  next = trimSamePath xs
+
+{-|
+>>> trimSubpath [[1,2,3,4],[2,3,4],[3,4]]
+[[1,2,3,4]]
+-}
+trimSubpath :: [Path] -> [Path]
+trimSubpath [] = []
+trimSubpath xs = filter (uniqPath xs) xs where
+  uniqPath :: [Path] -> Path -> Bool
+  uniqPath xs y = never (y `isSubpathOf`) [x | x<-xs, x/=y]
+
+{-|
+>>> never (>0) [0,0,0]
 True
->>> isCube [[1,2],[3,4]]
-True
->>> isCube [[1,2,3],[4,5,6],[7,8,9]]
-True
->>> isCube [[1,2],[3,4],[5,6]]
+>>> never (>0) [0,0,1,0]
 False
->>> isCube [[1,2,3],[4,5],[7,8,9]]
+>>> never (>0) []
+True
+-}
+never :: Foldable t => (a -> Bool) -> t a -> Bool
+never f xs = not (any f xs)
+
+{-|
+>>> isRotation [1,2,3,4] [2,3,4,1]
+True
+>>> isRotation [1,2,3,4] [3,4,1,2]
+True
+>>> isRotation [1,2,3,4] [4,1,2,3]
+True
+>>> isRotation [1,2,3,4] [1,2,3,4]
+True
+>>> isRotation [1,2,3,4] [1,2,4,3]
+False
+>>> isRotation [1,2,3,4] [1,2,3]
 False
 -}
-isCube :: [[a]] -> Bool
-isCube xs = all (\x -> length x == length xs) xs
+isRotation :: (Eq a) => [a] -> [a] -> Bool
+isRotation x y
+  | length x /= length y = False
+  | otherwise              = y `elem` iterateRotations x where
+    iterateRotations :: [a] -> [[a]]
+    iterateRotations z = map (repeatF rotate z) [0..]
+    rotate :: [a] -> [a]
+    rotate xs = tail xs ++ [head xs]
+
+{-|
+>>> repeatF (*2) 1 10
+1024
+>>> repeatF (++".") "hmm" 3
+"hmm..."
+-}
+repeatF :: (a -> a) -> a -> Int -> a
+repeatF _ x 0 = x
+repeatF f x n = repeatF f (f x) (n-1)
 
 {-|
 >>> walk [2,3,4,1] 1

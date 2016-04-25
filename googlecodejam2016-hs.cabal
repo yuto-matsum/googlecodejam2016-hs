@@ -41,6 +41,16 @@ test-suite tests
   main-is:             Spec.hs
   build-depends:       base
                      , doctest
+                     , directory
+  ghc-options:         -threaded -rtsopts -with-rtsopts=-N
+  default-language:    Haskell2010
+
+test-suite q1a-c-test
+  type:                exitcode-stdio-1.0
+  hs-source-dirs:      test/q1a
+  main-is:             CSpec.hs
+  build-depends:       base
+                     , doctest
   ghc-options:         -threaded -rtsopts -with-rtsopts=-N
   default-language:    Haskell2010
 
