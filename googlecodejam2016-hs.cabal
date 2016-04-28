@@ -35,6 +35,30 @@ executable q1a-c
                      , containers
   default-language:    Haskell2010
 
+executable 2010africa-a
+  hs-source-dirs:      src/2010africa
+  main-is:             A.hs
+  ghc-options:         -threaded -rtsopts -with-rtsopts=-N
+  build-depends:       base
+                     , containers
+  default-language:    Haskell2010
+
+executable 2010africa-b
+  hs-source-dirs:      src/2010africa
+  main-is:             B.hs
+  ghc-options:         -threaded -rtsopts -with-rtsopts=-N
+  build-depends:       base
+                     , containers
+  default-language:    Haskell2010
+
+executable 2010africa-c
+  hs-source-dirs:      src/2010africa
+  main-is:             C.hs
+  ghc-options:         -threaded -rtsopts -with-rtsopts=-N
+  build-depends:       base
+                     , containers
+  default-language:    Haskell2010
+
 test-suite tests
   type:                exitcode-stdio-1.0
   hs-source-dirs:      test
@@ -48,6 +72,33 @@ test-suite tests
 test-suite q1a-c-test
   type:                exitcode-stdio-1.0
   hs-source-dirs:      test/q1a
+  main-is:             CSpec.hs
+  build-depends:       base
+                     , doctest
+  ghc-options:         -threaded -rtsopts -with-rtsopts=-N
+  default-language:    Haskell2010
+
+test-suite 2010africa-a-test
+  type:                exitcode-stdio-1.0
+  hs-source-dirs:      test/2010africa
+  main-is:             ASpec.hs
+  build-depends:       base
+                     , doctest
+  ghc-options:         -threaded -rtsopts -with-rtsopts=-N
+  default-language:    Haskell2010
+
+test-suite 2010africa-b-test
+  type:                exitcode-stdio-1.0
+  hs-source-dirs:      test/2010africa
+  main-is:             BSpec.hs
+  build-depends:       base
+                     , doctest
+  ghc-options:         -threaded -rtsopts -with-rtsopts=-N
+  default-language:    Haskell2010
+
+test-suite 2010africa-c-test
+  type:                exitcode-stdio-1.0
+  hs-source-dirs:      test/2010africa
   main-is:             CSpec.hs
   build-depends:       base
                      , doctest
