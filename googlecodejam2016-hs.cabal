@@ -14,21 +14,21 @@ build-type:          Simple
 cabal-version:       >=1.10
 
 executable q1a-a
-  hs-source-dirs:      q1a
+  hs-source-dirs:      src/q1a
   main-is:             A.hs
   ghc-options:         -threaded -rtsopts -with-rtsopts=-N
   build-depends:       base
   default-language:    Haskell2010
 
 executable q1a-b
-  hs-source-dirs:      q1a
+  hs-source-dirs:      src/q1a
   main-is:             B.hs
   ghc-options:         -threaded -rtsopts -with-rtsopts=-N
   build-depends:       base
   default-language:    Haskell2010
 
 executable q1a-c
-  hs-source-dirs:      q1a
+  hs-source-dirs:      src/q1a
   main-is:             C.hs
   ghc-options:         -threaded -rtsopts -with-rtsopts=-N
   build-depends:       base
