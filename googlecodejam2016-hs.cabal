@@ -35,6 +35,27 @@ executable q1a-c
                      , containers
   default-language:    Haskell2010
 
+executable q1b-a
+  hs-source-dirs:      src/q1b
+  main-is:             A.hs
+  ghc-options:         -threaded -rtsopts -with-rtsopts=-N
+  build-depends:       base
+  default-language:    Haskell2010
+
+executable q1b-b
+  hs-source-dirs:      src/q1b
+  main-is:             B.hs
+  ghc-options:         -threaded -rtsopts -with-rtsopts=-N
+  build-depends:       base
+  default-language:    Haskell2010
+
+executable q1b-c
+  hs-source-dirs:      src/q1b
+  main-is:             C.hs
+  ghc-options:         -threaded -rtsopts -with-rtsopts=-N
+  build-depends:       base
+  default-language:    Haskell2010
+
 executable 2010africa-a
   hs-source-dirs:      src/2010africa
   main-is:             A.hs
